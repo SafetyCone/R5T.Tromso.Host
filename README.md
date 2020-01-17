@@ -1,0 +1,2 @@
+# R5T.Tromso.Host
+A types library for building an IHost using the Tromso project types.
