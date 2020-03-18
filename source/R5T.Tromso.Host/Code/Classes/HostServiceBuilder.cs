@@ -40,12 +40,19 @@ namespace R5T.Tromso.Host
 
         public void Build(IServiceProvider configurationServiceProvider)
         {
+            this.HostBuilder.ConfigureAppConfiguration(configurationBuilder =>
+            {
+                this.ConfigureConfigurationActions.ForEach(configureConfigurationAction => configureConfigurationAction(configurationBuilder, configurationServiceProvider));
+            });
+
+            this.HostBuilder.ConfigureServices(services =>
+            {
+                this.ConfigureServicesActions.ForEach(servicesAction => servicesAction(services));
+            });
+
             this.Host = this.HostBuilder.Build();
 
-            foreach (var action in this.ConfigureActions)
-            {
-                action(this.Host.Services);
-            }
+            this.ConfigureActions.ForEach(configureAction => configureAction(this.Host.Services));
         }
 
         public IHost GetResult()
